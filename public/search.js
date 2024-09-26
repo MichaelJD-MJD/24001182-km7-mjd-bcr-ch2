@@ -1,5 +1,5 @@
 const searchBtn = document.getElementById("search-btn");
-import cars from "../../data/cars.json" with {type:"json"};
+import cars from "./data/cars.json" with {type:"json"};
 const hasilSearch = document.getElementById("hasil-search");
 
 searchBtn.addEventListener("click", (event) => {
