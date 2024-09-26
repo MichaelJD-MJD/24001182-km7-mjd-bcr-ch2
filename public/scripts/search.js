@@ -2,11 +2,31 @@ const searchBtn = document.getElementById("search-btn");
 import cars from "../../data/cars.json" with {type:"json"};
 const hasilSearch = document.getElementById("hasil-search");
 
-searchBtn.addEventListener("click", () => {
+searchBtn.addEventListener("click", (event) => {
   hasilSearch.innerHTML = "";
   const tipeDriver = document.getElementById("driver").value;
   const tanggalSewa = document.getElementById("tanggal").value;
   const waktuJemput = document.getElementById("waktu").value;
+
+  if (!tipeDriver) {
+    alert("Silakan pilih tipe driver!");
+    event.preventDefault();
+    return;
+  }
+
+  if (!tanggalSewa) {
+    alert("Silakan pilih tanggal sewa!");
+    event.preventDefault();
+    return;
+  }
+
+  if (!waktuJemput) {
+    alert("Silakan pilih waktu jemput!");
+    event.preventDefault();
+    return;
+  }
+
+
   const jumlahPenumpangInput = document.getElementById("jumlahPenumpang").value;
   const jumlahPenumpang = jumlahPenumpangInput
     ? parseInt(jumlahPenumpangInput, 10)
@@ -20,6 +40,14 @@ searchBtn.addEventListener("click", () => {
       currency: "IDR",
       minimumFractionDigits: 0,
     }).format(number);
+  };
+
+  const driverType = () => {
+    if (tipeDriver === "DenganSopir") {
+      return true;
+    } else if (tipeDriver === "TanpaSopir") {
+      return false;
+    }
   };
 
   function getRandomTimestamp(start, end) {
@@ -38,15 +66,16 @@ searchBtn.addEventListener("click", () => {
 
     if (
       availableTimestamp <= sewaTimestamp &&
-      (jumlahPenumpang === null || car.capacity >= jumlahPenumpang)
+      (jumlahPenumpang === null || car.capacity >= jumlahPenumpang) &&
+      car.available === driverType()
     ) {
       carsFilter.push(car);
     }
   });
 
   const render = (template) => {
-      hasilSearch.innerHTML += template;
-  }
+    hasilSearch.innerHTML += template;
+  };
 
   if (carsFilter.length <= 0) {
     const template = `
@@ -81,7 +110,7 @@ searchBtn.addEventListener("click", () => {
             </div>
           </div>
     `;
-    render(template);
+      render(template);
     });
   }
 });
